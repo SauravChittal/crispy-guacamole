@@ -1,0 +1,5 @@
+plumbum
+questionary
+pyfidgit
+pytest
+pylint
