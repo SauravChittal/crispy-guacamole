@@ -1,8 +1,13 @@
-from numpy.random import rand
-from plumbum import cli 
+"""
+This CLI application does a bunch of random things as mentioned in README.md
+
+Apart from numpy and termplotlib, other imports are basic.
+Numpy and termplotlib are for the histogram
+"""
+
+from plumbum import cli
 from pyfiglet import Figlet
 import questionary as q
-from questionary.prompts.text import text
 from questionary import Validator, ValidationError
 
 import termplotlib as tpl
@@ -11,6 +16,7 @@ import numpy
 import random
 
 class NameValidator(Validator):
+    """This class is made basically for validation which is used later on"""
     def validate(self, document):
         some = open("all_pokemon.txt", "r")
         all_str = some.read().replace(" ", "-").upper().split(",")
@@ -33,10 +39,12 @@ class NameValidator(Validator):
             raise ValidationError(message="Please enter an Actual Pokemon", cursor_position=len(document.text))
 
 def print_banner(text):
+    """Prints the font in figlet style"""
     print(Figlet(font='smslant').renderText(text))
 
 def not_pokemon_function():
-    # Ironic I'm using random inside seen
+    """The code used to plot the necessary histogram"""
+    # Ironic I'm using random inside seed
     numpy.random.seed(random.randint(1, 1000))
     sample = numpy.random.normal(size=1000)
     counts, bin_edges = numpy.histogram(sample, bins=39)
@@ -46,6 +54,7 @@ def not_pokemon_function():
     print("Hopefully this random histogram(because I couldn't generate plot graphs) which is generated cheers you up")
 
 def validate_pokemon(text):
+    """This function is basically a copy for testing purposes. Code stolen from my discord bot"""
     some = open("all_pokemon.txt", "r")
     all_str = some.read().replace(" ", "-").upper().split(",")
     pokemon_name = str(text.upper())
@@ -68,13 +77,16 @@ def validate_pokemon(text):
 
 
 def pokemon_function(pokemon, oppo_pokemon, uhp=100, ohp=100):
+    """This is the function which is called when playing Pokemon is selected
+        In terms of variables, anything prefixed with u is supposed to mean your and
+        anything prefixed with o is supposed to mean opponents"""
     print(Figlet(font='barbwire', width=200).renderText("HP : " + str(ohp) + "/100"))
     print(Figlet(font='banner3', width=200).renderText(oppo_pokemon))
 
     print(Figlet(font='barbwire', width=200).renderText("HP : " + str(uhp) + "/100"))
     print(Figlet(font='colossal', width=200).renderText(pokemon))
 
-    answer = q.select("Select a move", choices=["Metronome", "Metronome", "Metronome", "Metronome"]).ask()
+    q.select("Select a move", choices=["Metronome", "Metronome", "Metronome", "Metronome"]).ask()
 
     urandom = random.randint(10, 20)
     orandom = random.randint(10, 20)
@@ -92,6 +104,7 @@ def pokemon_function(pokemon, oppo_pokemon, uhp=100, ohp=100):
     pokemon_function(pokemon, oppo_pokemon, uhp, ohp)
 
 def rps_function():
+    """This is the rock paper scissor function."""
     randNumber = random.randint(1,3)
     companswer = "Scissor"
     if randNumber == 1:
@@ -109,9 +122,9 @@ def rps_function():
         print(Figlet(font='3x5', width=100).renderText("Unfortunately you lost"))
     else:
         print(Figlet(font='3x5').renderText("You won yay"))
-    pass
 
 class RandomBoredThings(cli.Application):
+    """Main function which calls the CLI"""
     VERSION = "1.3"
     r_p_s = cli.Flag(['p', 'play'], help="Allows you to play Rock Paper Scissors with the computer")
 
